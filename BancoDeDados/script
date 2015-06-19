@@ -1,0 +1,11 @@
+--- Script Sql ---
+
+create table usuario(
+	cpf VARCHAR(15) not null unique primary key,
+	rg VARCHAR(15) not null unique,
+	nome VARCHAR(100),
+	idade INTERGER,
+	telefone varchar(15),
+	celular varchar(15),
+	endereco varchar(100)
+);

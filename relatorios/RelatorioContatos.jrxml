@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="null" language="groovy" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="7d41a77a-99a7-401e-b101-eb01bdde55b9">
+	<property name="ireport.zoom" value="1.771561000000001"/>
+	<property name="ireport.x" value="9"/>
+	<property name="ireport.y" value="85"/>
+	<field name="nome" class="java.lang.String"/>
+	<field name="email" class="java.lang.String"/>
+	<field name="sexo" class="java.lang.String"/>
+	<field name="dataNascimento" class="java.util.Date"/>
+	<variable name="quantidadeMasculino" class="java.lang.Integer" calculation="Count">
+		<variableExpression><![CDATA[$F{sexo}.equals("M") ? "SomaNotNull" : null]]></variableExpression>
+	</variable>
+	<variable name="quantidadeFeminino" class="java.lang.Integer" calculation="Count">
+		<variableExpression><![CDATA[$F{sexo}.equals("F") ? "SomaNotNull" : null]]></variableExpression>
+	</variable>
+	<background>
+		<band/>
+	</background>
+	<title>
+		<band height="72">
+			<frame>
+				<reportElement mode="Opaque" x="-20" y="-20" width="595" height="92" backcolor="#006699" uuid="1562a903-8cc0-4a45-80b8-7995e6d32d98"/>
+				<staticText>
+					<reportElement x="20" y="20" width="503" height="43" forecolor="#FFFFFF" uuid="669324e3-0c6e-446b-8d01-4bba8fda0421"/>
+					<textElement>
+						<font size="34" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Gerenciador de Contatos ]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="395" y="65" width="180" height="20" forecolor="#FFFFFF" uuid="00cd4420-d6d8-41d6-9e98-69e878fc6242"/>
+					<textElement textAlignment="Right">
+						<font size="14" isBold="false"/>
+					</textElement>
+					<text><![CDATA[Relátorio de Contatos]]></text>
+				</staticText>
+			</frame>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="13"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="21">
+			<line>
+				<reportElement x="-20" y="20" width="595" height="1" forecolor="#666666" uuid="5ae560ad-52cd-4607-b6cb-605b5c01f982"/>
+			</line>
+			<staticText>
+				<reportElement x="12" y="1" width="134" height="20" uuid="4827e538-5ab2-43c8-b081-685620a94d7b"/>
+				<text><![CDATA[Nome]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="146" y="1" width="158" height="20" uuid="752f4dd7-9b85-4230-b4b1-466bd2e9f926"/>
+				<text><![CDATA[Email]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="304" y="1" width="108" height="20" uuid="2d1a3338-63ff-44ab-ac83-8a49b593a0c0"/>
+				<text><![CDATA[Sexo]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="412" y="1" width="143" height="20" uuid="6d74979d-e495-45b6-a292-3c72ed89851a"/>
+				<text><![CDATA[Data de Nascimento]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20">
+			<line>
+				<reportElement positionType="FixRelativeToBottom" x="0" y="19" width="555" height="1" uuid="67a8db72-8344-4c6f-bf25-7ef039244092"/>
+			</line>
+			<textField>
+				<reportElement x="12" y="0" width="134" height="20" uuid="8965272a-8d9e-4f7e-92b3-14b901e085ec"/>
+				<textFieldExpression><![CDATA[$F{nome}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="146" y="0" width="158" height="20" uuid="88753f14-b6ef-4acf-80ee-19e44eef5af6"/>
+				<textFieldExpression><![CDATA[$F{email}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="304" y="0" width="108" height="20" uuid="b50dc7a3-82e4-4661-abd7-761bd2d4c8e3"/>
+				<textFieldExpression><![CDATA[$F{sexo}.equals("F") == true ? "Feminino" : "Masculino"]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy">
+				<reportElement x="412" y="0" width="143" height="20" uuid="dabc7616-0421-43cf-a4a5-c77da198f825"/>
+				<textFieldExpression><![CDATA[$F{dataNascimento}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band/>
+	</columnFooter>
+	<pageFooter>
+		<band height="17">
+			<textField>
+				<reportElement mode="Opaque" x="0" y="4" width="515" height="13" backcolor="#E6E6E6" uuid="da98dbae-247b-4ace-ac2c-c518a3418b18"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA["Página "+$V{PAGE_NUMBER}+" de"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement mode="Opaque" x="515" y="4" width="40" height="13" backcolor="#E6E6E6" uuid="cedd00ae-2301-4b79-981b-5ba32757bd4d"/>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField pattern="EEEEE dd MMMMM yyyy">
+				<reportElement x="0" y="4" width="100" height="13" uuid="110df525-12cb-48e2-aef1-8a0ee9ab78be"/>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band height="150">
+			<staticText>
+				<reportElement x="12" y="15" width="134" height="20" uuid="7eb6029f-363d-4570-85e5-b0a7a7cef96b"/>
+				<text><![CDATA[Quantidade de homens]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="158" y="15" width="135" height="20" uuid="b52d476c-fb4f-430c-a9b7-f627aac53a32"/>
+				<textFieldExpression><![CDATA[$V{quantidadeMasculino}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="12" y="51" width="134" height="20" uuid="eb1814a6-112a-4b68-a2b2-6237fe51b84d"/>
+				<text><![CDATA[Quantidade de mulheres]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="158" y="51" width="135" height="20" uuid="a4df170f-7a6d-45dd-8d4e-3f5884549207"/>
+				<textFieldExpression><![CDATA[$V{quantidadeFeminino}]]></textFieldExpression>
+			</textField>
+			<pieChart>
+				<chart>
+					<reportElement x="105" y="51" width="324" height="99" uuid="a906b173-c681-4295-803e-cc4715a7e146"/>
+					<chartTitle/>
+					<chartSubtitle/>
+					<chartLegend/>
+				</chart>
+				<pieDataset>
+					<dataset incrementType="Report"/>
+					<pieSeries>
+						<keyExpression><![CDATA["FEMININO"]]></keyExpression>
+						<valueExpression><![CDATA[$V{quantidadeFeminino}]]></valueExpression>
+						<labelExpression><![CDATA["" + $V{quantidadeFeminino}+"%"]]></labelExpression>
+					</pieSeries>
+					<pieSeries>
+						<keyExpression><![CDATA["Masculino"]]></keyExpression>
+						<valueExpression><![CDATA[$V{quantidadeMasculino}]]></valueExpression>
+						<labelExpression><![CDATA[""+$V{quantidadeMasculino}+"%"]]></labelExpression>
+					</pieSeries>
+				</pieDataset>
+				<piePlot>
+					<plot/>
+					<itemLabel/>
+				</piePlot>
+			</pieChart>
+		</band>
+	</summary>
+</jasperReport>
