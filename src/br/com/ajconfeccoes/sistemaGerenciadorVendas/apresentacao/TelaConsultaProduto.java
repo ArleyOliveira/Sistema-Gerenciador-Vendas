@@ -119,7 +119,6 @@ public class TelaConsultaProduto extends Tela {
 
         btnAtualizar.setBackground(new java.awt.Color(250, 253, 254));
         btnAtualizar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/ajconfeccoes/sistemaGerenciadorVendas/apresentacao/imagens/arrow_refresh.png"))); // NOI18N
-        btnAtualizar.setOpaque(true);
         btnAtualizar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnAtualizarActionPerformed(evt);
