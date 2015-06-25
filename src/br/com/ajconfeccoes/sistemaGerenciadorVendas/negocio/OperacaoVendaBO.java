@@ -58,7 +58,7 @@ public class OperacaoVendaBO {
     }
     
     public void verificarClienteExistente(Cliente cliente) {
-        if (cliente == null) {
+        if (cliente == null || cliente.getCpf() == null) {
             throw new ClienteInvalidoException("Venda invalida.\n Não há cliente");
         }
     }
