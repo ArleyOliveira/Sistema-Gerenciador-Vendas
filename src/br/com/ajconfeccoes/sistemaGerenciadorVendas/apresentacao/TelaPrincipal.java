@@ -9,12 +9,17 @@ import br.com.ajconfeccoes.sistemaGerenciadorVendas.apresentacao.classesUtil.Cur
 import br.com.ajconfeccoes.sistemaGerenciadorVendas.apresentacao.classesUtil.MensagemTela;
 import br.com.ajconfeccoes.sistemaGerenciadorVendas.apresentacao.excessoes.ArgumentInvalidExeception;
 import br.com.ajconfeccoes.sistemaGerenciadorVendas.entidade.CaixaDiario;
+import br.com.ajconfeccoes.sistemaGerenciadorVendas.entidade.Conta;
+import br.com.ajconfeccoes.sistemaGerenciadorVendas.entidade.DadosGraficoVendasMensal;
 import br.com.ajconfeccoes.sistemaGerenciadorVendas.entidade.Produto;
+import br.com.ajconfeccoes.sistemaGerenciadorVendas.entidade.Usuario;
 import br.com.ajconfeccoes.sistemaGerenciadorVendas.negocio.CaixaDiarioBO;
+import br.com.ajconfeccoes.sistemaGerenciadorVendas.negocio.ContaBO;
 import br.com.ajconfeccoes.sistemaGerenciadorVendas.negocio.ProdutoBO;
 import java.awt.Color;
 import java.beans.PropertyVetoException;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -42,24 +47,30 @@ public class TelaPrincipal extends javax.swing.JFrame {
     private TelaConsultaContas telaConsultaContas = null;
     private TelaIniciarCaixa telaIniciarCaixa = null;
     private TelaExibirRelatorioDiario telaExibirRelatorioDiario = null;
+    private TelaAlterarSenhaUsuario telaAlterarSenhaUsuario = null;
 
     private TelaOperacoesVenda telaOperacoesVenda = null;
+    
+    Usuario usuario = null;
 
     /**
      * Creates new form TelaPrincipal
      */
-    public TelaPrincipal() {
+    public TelaPrincipal(Usuario usuario) {
         Color suacor = new Color(60, 59, 55);
         initComponents();
         this.barraMenu.setBackground(suacor);
+        this.usuario = usuario;
+        this.mnuUsuarioAtivo.setText(usuario.getNome());
         this.abrirTelaOperacoesVenda();
+        
     }
 
     void abrirTelaOperacoesVenda() {
         if (this.telaOperacoesVenda == null || this.telaOperacoesVenda.isClosed()) {
             try {
                 // TODO add your handling code her
-                this.telaOperacoesVenda = new TelaOperacoesVenda();
+                this.telaOperacoesVenda = new TelaOperacoesVenda(this.usuario);
                 jdpAreaDeTrabalho.add(telaOperacoesVenda);
                 telaOperacoesVenda.setMaximum(true);
                 telaOperacoesVenda.setVisible(true);
@@ -116,6 +127,9 @@ public class TelaPrincipal extends javax.swing.JFrame {
         mnuGraficoVendasMensal = new javax.swing.JMenuItem();
         mnuAjuda = new javax.swing.JMenu();
         mnuSobre = new javax.swing.JMenuItem();
+        mnuUsuarioAtivo = new javax.swing.JMenu();
+        btnAlterarSenha = new javax.swing.JMenuItem();
+        btnSair = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Sistema Geren. Vendas");
@@ -238,6 +252,11 @@ public class TelaPrincipal extends javax.swing.JFrame {
 
         mnuFinalizarCaixa.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/ajconfeccoes/sistemaGerenciadorVendas/apresentacao/imagens/monitor_delete.png"))); // NOI18N
         mnuFinalizarCaixa.setText("Finalizar caixa");
+        mnuFinalizarCaixa.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuFinalizarCaixaActionPerformed(evt);
+            }
+        });
         mnuCaixa.add(mnuFinalizarCaixa);
 
         mnuGerenciador.add(mnuCaixa);
@@ -306,6 +325,11 @@ public class TelaPrincipal extends javax.swing.JFrame {
 
         mnuGraficoVendasMensal.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/ajconfeccoes/sistemaGerenciadorVendas/apresentacao/imagens/chart_line_add.png"))); // NOI18N
         mnuGraficoVendasMensal.setText("Vendas Mensal");
+        mnuGraficoVendasMensal.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuGraficoVendasMensalActionPerformed(evt);
+            }
+        });
         mnuGrafico.add(mnuGraficoVendasMensal);
 
         barraMenu.add(mnuGrafico);
@@ -321,6 +345,26 @@ public class TelaPrincipal extends javax.swing.JFrame {
         mnuAjuda.add(mnuSobre);
 
         barraMenu.add(mnuAjuda);
+
+        mnuUsuarioAtivo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/ajconfeccoes/sistemaGerenciadorVendas/apresentacao/imagens/status_online.png"))); // NOI18N
+
+        btnAlterarSenha.setText("Alterar senha");
+        btnAlterarSenha.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAlterarSenhaActionPerformed(evt);
+            }
+        });
+        mnuUsuarioAtivo.add(btnAlterarSenha);
+
+        btnSair.setText("Sair");
+        btnSair.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSairActionPerformed(evt);
+            }
+        });
+        mnuUsuarioAtivo.add(btnSair);
+
+        barraMenu.add(mnuUsuarioAtivo);
 
         setJMenuBar(barraMenu);
 
@@ -569,6 +613,97 @@ public class TelaPrincipal extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_mnuRelatorioEstoqueAtualActionPerformed
 
+    private void mnuGraficoVendasMensalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuGraficoVendasMensalActionPerformed
+        try {
+            // TODO add your handling code here:
+            this.setCursor(CursorUtil.getCursor(3));
+            ContaBO contaBO = new ContaBO();
+            List<DadosGraficoVendasMensal> vendasMensais = contaBO.buscarByMesAtualGerarGrafico();
+            this.gerarGraficoVendasMensal(vendasMensais);
+        } catch (ArgumentInvalidExeception aie) {
+            JOptionPane.showMessageDialog(this,aie.getMessage(), "Consultar vendas", JOptionPane.ERROR_MESSAGE);
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(this, "Erro desconhecido. Contate com adminstrador", "Consultar vendas", JOptionPane.ERROR_MESSAGE);
+        } finally{
+            this.setCursor(CursorUtil.getCursor(0));
+        }
+        
+    }//GEN-LAST:event_mnuGraficoVendasMensalActionPerformed
+
+    private void btnSairActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSairActionPerformed
+        // TODO add your handling code here:
+      
+        int resposta;
+        String mensagem = "Deseja sair do sistema ?";
+        String titulo = "Sair";
+        resposta = JOptionPane.showConfirmDialog(null, mensagem, titulo, JOptionPane.YES_NO_OPTION);
+        if (resposta == JOptionPane.YES_OPTION) {
+            TelaLogin telaLogin = new TelaLogin();
+            telaLogin.setVisible(true);
+            this.dispose();
+        }
+    }//GEN-LAST:event_btnSairActionPerformed
+
+    private void btnAlterarSenhaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAlterarSenhaActionPerformed
+        // TODO add your handling code here:
+        if (this.telaAlterarSenhaUsuario == null || this.telaAlterarSenhaUsuario.isClosed()) {
+            try {
+                // TODO add your handling code her
+                this.telaAlterarSenhaUsuario = new TelaAlterarSenhaUsuario(this.usuario);
+                jdpAreaDeTrabalho.add(telaAlterarSenhaUsuario);
+                telaAlterarSenhaUsuario.setMaximum(true);
+                telaAlterarSenhaUsuario.setVisible(true);
+            } catch (PropertyVetoException ex) {
+                Logger.getLogger(TelaPrincipal.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        } else {
+            telaAlterarSenhaUsuario.setVisible(true);
+            telaAlterarSenhaUsuario.moveToFront();
+        }
+        
+    }//GEN-LAST:event_btnAlterarSenhaActionPerformed
+
+    private void mnuFinalizarCaixaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuFinalizarCaixaActionPerformed
+        // TODO add your handling code here:
+        int resposta;
+        String mensagem = "Deseja finalizar o caixa?";
+        String titulo = "Finalizar caixa";
+        resposta = JOptionPane.showConfirmDialog(null, mensagem, titulo, JOptionPane.YES_NO_OPTION);
+        if (resposta == JOptionPane.YES_OPTION) {
+            try {
+                CaixaDiarioBO caixaBO = new CaixaDiarioBO();
+                caixaBO.finalizarCaixa();
+                MensagemTela.exibirMensagemSucesso(null,"O caixa foi finalizado com sucesso!","Finalizar caixa");
+            } catch (ArgumentInvalidExeception aie) {
+                JOptionPane.showConfirmDialog(null, aie.getMessage(), "Finalizar caixa", JOptionPane.INFORMATION_MESSAGE);
+                        ;
+            } catch (SQLException ex) {
+                MensagemTela.exibirMensagemErro(null, "Erro desconhecido. Contate com o adminstrador", "Finalizar caixa");
+            }
+        }
+    }//GEN-LAST:event_mnuFinalizarCaixaActionPerformed
+
+    
+    public void gerarGraficoVendasMensal( List<DadosGraficoVendasMensal> vendasMensais){
+        try{
+            String arquivoRelatorio = System.getProperty("user.dir")
+                   + "/relatorios/GraficoVendasMensal.jasper";
+            
+            Map<String, Object> paramentros = new HashMap<String, Object>();
+            
+            JRBeanCollectionDataSource fonteDados 
+                      = new JRBeanCollectionDataSource(vendasMensais);
+            
+            JasperPrint relatorioGerado = JasperFillManager.fillReport(arquivoRelatorio, paramentros, fonteDados);
+            
+            JasperViewer telaExibicaoRelatorio 
+                       = new JasperViewer(relatorioGerado, false);
+            telaExibicaoRelatorio.setTitle("Gráfico de Vendas Mensais");
+            telaExibicaoRelatorio.setVisible(true);
+        } catch(JRException ex){            
+            JOptionPane.showMessageDialog(this, "Erro ao exibir gráfico de vendas mensal.", "Erro", JOptionPane.ERROR_MESSAGE);
+        } 
+    }
     public void gerarPdfEstoque(List<Produto> produtos){
          try{
             this.setCursor(CursorUtil.getCursor(3));  
@@ -592,60 +727,13 @@ public class TelaPrincipal extends javax.swing.JFrame {
             this.setCursor(CursorUtil.getCursor(0));
         }
     }
-/**
- * @param args the command line arguments
- */
-public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                
 
-}
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(TelaPrincipal.class  
-
-.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } 
-
-catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(TelaPrincipal.class  
-
-.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } 
-
-catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(TelaPrincipal.class  
-
-.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } 
-
-catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(TelaPrincipal.class  
-
-.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new TelaPrincipal().setVisible(true);
-            }
-        });
-    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuBar barraMenu;
+    private javax.swing.JMenuItem btnAlterarSenha;
     private javax.swing.JMenuItem btnContas;
+    private javax.swing.JMenuItem btnSair;
     private javax.swing.JDesktopPane jdpAreaDeTrabalho;
     private javax.swing.JMenu mnuAjuda;
     private javax.swing.JMenuItem mnuAtualizarProduto;
@@ -674,5 +762,6 @@ catch (javax.swing.UnsupportedLookAndFeelException ex) {
     private javax.swing.JMenuItem mnuRelatorioMensal;
     private javax.swing.JMenuItem mnuSobre;
     private javax.swing.JMenu mnuUsuario;
+    private javax.swing.JMenu mnuUsuarioAtivo;
     // End of variables declaration//GEN-END:variables
 }

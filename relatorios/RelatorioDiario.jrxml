@@ -4,6 +4,7 @@
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<parameter name="valorInicial" class="java.lang.Double"/>
+	<parameter name="valorFinal" class="java.lang.Double"/>
 	<field name="codigo" class="java.lang.String"/>
 	<field name="cliente" class="java.lang.String"/>
 	<field name="usuario" class="java.lang.String"/>
@@ -16,7 +17,7 @@
 		<variableExpression><![CDATA[$F{valor}]]></variableExpression>
 	</variable>
 	<variable name="valorLiquido" class="java.lang.Double">
-		<variableExpression><![CDATA[$V{valorFinal} - $P{valorInicial}]]></variableExpression>
+		<variableExpression><![CDATA[$P{valorFinal} - $P{valorInicial}]]></variableExpression>
 	</variable>
 	<background>
 		<band/>
@@ -24,7 +25,7 @@
 	<title>
 		<band height="72">
 			<frame>
-				<reportElement mode="Opaque" x="-20" y="-20" width="595" height="92" backcolor="#006699" uuid="b1250d04-652b-467d-8726-b566db7c8dc1"/>
+				<reportElement mode="Opaque" x="-30" y="-33" width="595" height="92" backcolor="#006699" uuid="b1250d04-652b-467d-8726-b566db7c8dc1"/>
 				<staticText>
 					<reportElement x="20" y="20" width="452" height="43" forecolor="#FFFFFF" uuid="a3f1dc80-4e06-4497-be82-938d9bb3da8d"/>
 					<textElement>
@@ -39,6 +40,13 @@
 					</textElement>
 					<text><![CDATA[Relátorio Diário]]></text>
 				</staticText>
+				<textField pattern="EEEEE dd MMMMM yyyy">
+					<reportElement x="30" y="66" width="253" height="20" forecolor="#FEFEFE" uuid="ef402f6e-884d-4783-ad9c-642a00e29d2d"/>
+					<textElement>
+						<font size="12" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+				</textField>
 			</frame>
 		</band>
 	</title>
@@ -173,25 +181,25 @@
 				<textFieldExpression><![CDATA[$V{COLUMN_COUNT}]]></textFieldExpression>
 			</textField>
 			<textField pattern="###0.00;-###0.00">
-				<reportElement x="236" y="97" width="180" height="20" uuid="50a11a5f-bf6d-4109-9d8d-7b9edf786c53"/>
-				<textElement>
-					<font size="12" isBold="true"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$V{valorFinal}]]></textFieldExpression>
-			</textField>
-			<textField>
 				<reportElement x="236" y="56" width="180" height="20" uuid="a3b290b5-368b-4900-bb81-2f978b64a634"/>
 				<textElement>
 					<font size="12" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{valorInicial}]]></textFieldExpression>
 			</textField>
-			<textField>
-				<reportElement x="236" y="133" width="191" height="20" uuid="74eb8965-6f7d-4c8b-a5d0-4f2f42381815"/>
+			<textField pattern="###0.00;-###0.00">
+				<reportElement x="236" y="133" width="180" height="20" uuid="74eb8965-6f7d-4c8b-a5d0-4f2f42381815"/>
 				<textElement>
 					<font size="12" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$V{valorLiquido}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00;-#,##0.00">
+				<reportElement x="236" y="97" width="180" height="20" uuid="882cc201-643c-44df-9fd9-f521dfba1ff3"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{valorFinal}]]></textFieldExpression>
 			</textField>
 		</band>
 	</summary>

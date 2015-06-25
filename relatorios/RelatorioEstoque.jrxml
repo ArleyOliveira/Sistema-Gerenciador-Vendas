@@ -102,7 +102,7 @@
 				</textElement>
 				<textFieldExpression><![CDATA[$F{estoque}]]></textFieldExpression>
 			</textField>
-			<textField pattern="#,##0.00;#,##0.00-">
+			<textField pattern="#,##0.00;-#,##0.00">
 				<reportElement x="434" y="0" width="118" height="20" uuid="6de69568-60ce-4a4b-b2b3-2513784aebec"/>
 				<textElement>
 					<font size="12"/>

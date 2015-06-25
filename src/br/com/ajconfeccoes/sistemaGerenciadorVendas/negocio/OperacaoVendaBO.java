@@ -9,6 +9,7 @@ import br.com.ajconfeccoes.sistemaGerenciadorVendas.apresentacao.excessoes.Argum
 import br.com.ajconfeccoes.sistemaGerenciadorVendas.apresentacao.excessoes.ClienteInvalidoException;
 import br.com.ajconfeccoes.sistemaGerenciadorVendas.apresentacao.excessoes.ClienteStatusNegativoException;
 import br.com.ajconfeccoes.sistemaGerenciadorVendas.apresentacao.excessoes.QuantidadeDeItensCompraInvalidoException;
+import br.com.ajconfeccoes.sistemaGerenciadorVendas.apresentacao.excessoes.VendaInvalidaException;
 import br.com.ajconfeccoes.sistemaGerenciadorVendas.dados.ContaDAO;
 import br.com.ajconfeccoes.sistemaGerenciadorVendas.dados.LiquidacaoDAO;
 import br.com.ajconfeccoes.sistemaGerenciadorVendas.dados.OperacaoVendaDAO;
@@ -27,8 +28,11 @@ import java.util.List;
 public class OperacaoVendaBO {
 
     public void criarVenda(OperacaoVenda operacaoVenda) throws ClienteInvalidoException, ArgumentInvalidExeception, QuantidadeDeItensCompraInvalidoException, ClienteStatusNegativoException, SQLException {
-        if(!operacaoVenda.getCliente().getCpf().equals("000.000.000-00")){
-            this.verificarClienteExistente(operacaoVenda.getCliente());
+        if(operacaoVenda == null){
+            throw new VendaInvalidaException("Venda invalida");
+        }
+        this.verificarClienteExistente(operacaoVenda.getCliente());
+        if(!operacaoVenda.getCliente().getCpf().equals("000.000.000-00")){           
             this.verificarUsuarioExiste(operacaoVenda.getUsuario());
             this.verificarQuantidadeItens(operacaoVenda.getItensCompra());
             this.verificarStatusCliente(operacaoVenda.getCliente());
@@ -41,6 +45,10 @@ public class OperacaoVendaBO {
     
  
     public void criarVendaAVista(OperacaoVenda operacaoVenda) throws ClienteInvalidoException, ArgumentInvalidExeception, QuantidadeDeItensCompraInvalidoException, ClienteStatusNegativoException, SQLException {
+        if(operacaoVenda == null){
+            throw new VendaInvalidaException("Venda invalida");
+        }
+        
         this.verificarClienteExistente(operacaoVenda.getCliente());
         this.verificarUsuarioExiste(operacaoVenda.getUsuario());
         this.verificarQuantidadeItens(operacaoVenda.getItensCompra());
@@ -81,6 +89,9 @@ public class OperacaoVendaBO {
     }
 
     public void criarVendaELiquidar(OperacaoVenda operacaoVenda) throws ArgumentInvalidExeception, ClienteInvalidoException, QuantidadeDeItensCompraInvalidoException, SQLException {
+        if(operacaoVenda == null){
+            throw new VendaInvalidaException("Venda invalida");
+        }
         this.verificarUsuarioExiste(operacaoVenda.getUsuario());
         this.verificarClienteExistente(operacaoVenda.getCliente());
         this.verificarQuantidadeItens(operacaoVenda.getItensCompra());

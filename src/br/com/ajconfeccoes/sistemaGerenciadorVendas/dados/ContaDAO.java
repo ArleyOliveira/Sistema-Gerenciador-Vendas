@@ -7,6 +7,7 @@ package br.com.ajconfeccoes.sistemaGerenciadorVendas.dados;
 
 import br.com.ajconfeccoes.sistemaGerenciadorVendas.entidade.Cliente;
 import br.com.ajconfeccoes.sistemaGerenciadorVendas.entidade.Conta;
+import br.com.ajconfeccoes.sistemaGerenciadorVendas.entidade.DadosGraficoVendasMensal;
 import br.com.ajconfeccoes.sistemaGerenciadorVendas.entidade.ItensCompra;
 import br.com.ajconfeccoes.sistemaGerenciadorVendas.entidade.OperacaoVenda;
 import br.com.ajconfeccoes.sistemaGerenciadorVendas.entidade.Produto;
@@ -29,6 +30,8 @@ public class ContaDAO {
     private static String SQL_SELECT_BY_CODIGO = "SELECT * FROM CONTAS WHERE CODIGO = ?";
     private static String SQL_SELECT_BY_VENDA = "SELECT * FROM CONTA WHERE VENDA = ?";
     private static String SQL_UPDATE_STATUS_CONTA = "UPDATE CONTA SET STATUS = FALSE WHERE CODIGO = ?";
+    
+    private static String SQL_SELECT_BY_MES_GERARGRAFICO = "SELECT DATA, COUNT(*) AS QUANTIDADE FROM CONTA WHERE Month(data) = MONTH(NOW()) GROUP BY DATA";
     
     public void criar(Connection conexao, OperacaoVenda venda) throws SQLException {
         PreparedStatement comando = null;
@@ -186,4 +189,38 @@ public class ContaDAO {
             }
         }
     }
+    
+    public List<DadosGraficoVendasMensal> buscarByMesGerarGrafico() throws SQLException {
+        List<DadosGraficoVendasMensal> vendasMensais = new ArrayList<>();
+        Connection conexao = null;
+        PreparedStatement comando = null;
+        ResultSet resultado = null;
+        try {
+            conexao = BancoDadosUtil.getConnection();
+            comando = conexao.prepareStatement(SQL_SELECT_BY_MES_GERARGRAFICO);
+            resultado = comando.executeQuery();
+
+            while (resultado.next()) {
+                DadosGraficoVendasMensal venda = new DadosGraficoVendasMensal();
+                venda.setData(resultado.getDate(1));
+                venda.setQuantidade(resultado.getInt(2));
+                vendasMensais.add(venda);
+            }
+
+        } catch (Exception e) {
+            if (conexao != null) {
+                conexao.rollback();
+            }
+            throw new RuntimeException();
+        } finally {
+            if (comando != null && !comando.isClosed()) {
+                comando.close();
+            }
+            if (conexao != null && !conexao.isClosed()) {
+                conexao.close();
+            }
+        }
+        return vendasMensais;
+    }
+
 }

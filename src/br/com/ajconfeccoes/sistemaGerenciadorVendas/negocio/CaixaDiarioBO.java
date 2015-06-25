@@ -76,9 +76,19 @@ public class CaixaDiarioBO {
         return caixas;
     }
     
-    public void finalizarCaixa(CaixaDiario caixaDiario) throws SQLException{
-       CaixaDiarioDAO caixaDiarioDAO = new CaixaDiarioDAO();
-       caixaDiarioDAO.reabrirCaixa(caixaDiario.getCodigo());
+    public void finalizarCaixa() throws SQLException{
+        CaixaDiario caixaDiario = null;
+        caixaDiario = buscarDadosCaixaAtual();
+        if(caixaDiario != null){
+            if(caixaDiario.isStatus()){
+                CaixaDiarioDAO caixaDiarioDAO = new CaixaDiarioDAO();
+                caixaDiarioDAO.finalizarCaixa(caixaDiario.getCodigo());
+            }else{
+                throw new ArgumentInvalidExeception("O caixa já escontra fechado.");
+            }    
+        }else{
+            throw new ArgumentInvalidExeception("O caixa não foi aberto hoje");
+        }
     }
     
 }

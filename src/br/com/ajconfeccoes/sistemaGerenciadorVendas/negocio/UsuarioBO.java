@@ -75,4 +75,9 @@ public class UsuarioBO {
             throw new ArgumentInvalidExeception("Login ou inválidos.\n Tente novamento efetuar o login.");
         }
     }
+    
+    public void atualizarDadosSenha(Usuario usuario) throws SQLException {
+        UsuarioDAO usuarioDAO = new UsuarioDAO();
+        usuarioDAO.atualizarDadosSenha(usuario);
+    }
 }

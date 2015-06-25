@@ -53,6 +53,8 @@ public class TelaLogin extends javax.swing.JFrame {
         lblPainelGerenciador = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setLocationByPlatform(true);
+        setResizable(false);
 
         pnlLogin.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Login", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Dialog", 1, 14), new java.awt.Color(0, 112, 255))); // NOI18N
         pnlLogin.setForeground(new java.awt.Color(179, 174, 174));
@@ -140,6 +142,7 @@ public class TelaLogin extends javax.swing.JFrame {
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnEntrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEntrarActionPerformed
@@ -150,6 +153,11 @@ public class TelaLogin extends javax.swing.JFrame {
             UsuarioBO usuarioBO = new UsuarioBO();
             usuario = usuarioBO.login(login, senha);
             exibirMensagemSucesso("Você logou com " + usuario.getNome(), "Login usuário");
+            TelaPrincipal principal = new TelaPrincipal(usuario);
+            principal.setVisible(true);
+            this.dispose();
+        } catch(CampoVazioException cve){
+            exibirMensagemErro(cve.getMessage(), "Login usuário");
         } catch(ArgumentInvalidExeception aie){
             exibirMensagemErro(aie.getMessage(), "Login usuário");
         } catch (Exception e) {

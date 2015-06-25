@@ -25,7 +25,8 @@ public class UsuarioDAO {
     private static final String SQL_UPDATE_DADOS = "UPDATE USUARIO SET RG = ?, NOME = ?, IDADE = ?, TELEFONE = ?, CELULAR = ?, ENDERECO = ? WHERE CPF = ?";
     private static final String SQL_DESATIVAR_POR_CPF = "UPDATE USUARIO SET F = FALSE WHERE CPF = ?";
     private static final String SQL_SELECT_BY_LOGIN_AND_SENHA = "SELECT * FROM USUARIO WHERE LOGIN = ? AND SENHA = ? AND F = TRUE";
-    
+ 
+    private static final String SQL_UPDATE_SENHA = "UPDATE USUARIO SET SENHA = ? WHERE CPF = ?";
     public void criar(Usuario usuario) throws SQLException{
         PreparedStatement comando = null;
         Connection conexao = null;    
@@ -257,6 +258,7 @@ public class UsuarioDAO {
                 usuario.setCelular(resultado.getString(6));
                 usuario.setEndereco(resultado.getString(7));
                 usuario.setPermissao(resultado.getInt(10));
+                usuario.setLogin(resultado.getString("LOGIN"));
             }
             
         } catch (Exception e) {
@@ -274,4 +276,30 @@ public class UsuarioDAO {
         }
         return usuario;
     }
+    
+    public void atualizarDadosSenha(Usuario usuario) throws SQLException{
+        PreparedStatement comando = null;
+        Connection conexao = null;    
+        try{
+            conexao = BancoDadosUtil.getConnection();
+            comando = conexao.prepareStatement(SQL_UPDATE_SENHA);
+            comando.setString(1, usuario.getSenha());
+            comando.setString(2, usuario.getCpf());
+            comando.execute();
+            conexao.commit();
+        } catch (Exception e) {
+            if (conexao != null) {
+                conexao.rollback();
+            }
+            throw new RuntimeException();
+        } finally {
+            if (comando != null && !comando.isClosed()) {
+                comando.close();
+            }
+            if (conexao != null && !conexao.isClosed()) {
+                conexao.close();
+            }
+        }
+    }
+    
 }

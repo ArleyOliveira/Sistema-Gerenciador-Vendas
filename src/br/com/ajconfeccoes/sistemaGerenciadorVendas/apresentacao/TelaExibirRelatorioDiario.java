@@ -288,6 +288,7 @@ public class TelaExibirRelatorioDiario extends Tela {
 
                 Map<String,Object> paramentros = new HashMap<>();
                 paramentros.put("valorInicial", caixaDiario.getValorInicial());
+                paramentros.put("valorFinal", caixaDiario.getValorFinal());
                 JRBeanCollectionDataSource fonteDados 
                           = new JRBeanCollectionDataSource(dadosGerados);
 
