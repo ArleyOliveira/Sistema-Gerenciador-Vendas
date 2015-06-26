@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="null" language="groovy" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="e40bf1f7-9742-4acd-a917-b5b3d994c7e8">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="0"/>
+	<property name="ireport.y" value="18"/>
 	<parameter name="valorInicial" class="java.lang.Double"/>
 	<parameter name="valorFinal" class="java.lang.Double"/>
 	<field name="codigo" class="java.lang.String"/>
@@ -38,7 +38,7 @@
 					<textElement textAlignment="Right">
 						<font size="14" isBold="false"/>
 					</textElement>
-					<text><![CDATA[Relátorio Diário]]></text>
+					<text><![CDATA[Relatório Diário]]></text>
 				</staticText>
 				<textField pattern="EEEEE dd MMMMM yyyy">
 					<reportElement x="30" y="66" width="253" height="20" forecolor="#FEFEFE" uuid="ef402f6e-884d-4783-ad9c-642a00e29d2d"/>
@@ -187,7 +187,7 @@
 				</textElement>
 				<textFieldExpression><![CDATA[$P{valorInicial}]]></textFieldExpression>
 			</textField>
-			<textField pattern="###0.00;-###0.00">
+			<textField pattern="#,##0.00;-#,##0.00">
 				<reportElement x="236" y="133" width="180" height="20" uuid="74eb8965-6f7d-4c8b-a5d0-4f2f42381815"/>
 				<textElement>
 					<font size="12" isBold="true"/>

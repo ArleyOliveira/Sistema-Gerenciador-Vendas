@@ -26,7 +26,7 @@
 					<textElement textAlignment="Right">
 						<font size="14" isBold="false"/>
 					</textElement>
-					<text><![CDATA[Relátorio de estoque]]></text>
+					<text><![CDATA[Relatório de estoque]]></text>
 				</staticText>
 				<textField pattern="EEEEE dd MMMMM yyyy">
 					<reportElement x="20" y="69" width="253" height="20" forecolor="#FEFEFE" uuid="01e8e1f1-0554-43fe-821e-1bf639aa7a2d"/>
